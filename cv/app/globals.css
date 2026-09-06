@@ -35,6 +35,6 @@
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-geist-sans), -apple-system, 'Segoe UI', sans-serif;
   transition: background 0.3s, color 0.3s;
 }

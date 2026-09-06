@@ -26,7 +26,6 @@ export default function Header({ basics }: Props) {
                         color: 'var(--text-primary)',
                         margin: 0,
                         lineHeight: 1.1,
-                        fontFamily: 'Georgia, serif',
                     }}>
                         {basics.name}
                     </h1>
