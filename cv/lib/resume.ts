@@ -40,6 +40,13 @@ export interface ResumeEducation {
     summary?: string
 }
 
+export interface ResumePublication {
+    name: string
+    publisher: string
+    releaseDate: string
+    url?: string
+}
+
 export interface ResumeSkill {
     name: string
     keywords: string[]
@@ -77,6 +84,7 @@ export interface Resume {
     education: ResumeEducation[]
     awards: ResumeAward[]
     certificates: ResumeCertificate[]
+    publications: ResumePublication[]
     skills: ResumeSkill[]
     languages: ResumeLanguage[]
     interests: { name: string; keywords: string[] }[]

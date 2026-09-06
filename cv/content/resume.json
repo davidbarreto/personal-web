@@ -277,6 +277,32 @@
             "date": "2016-06-01"
         }
     ],
+    "publications": [
+        {
+            "name": "Uma Interface de Prototipagem para Aplicações Pervasivas",
+            "publisher": "SBRC 2013 (Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos)",
+            "releaseDate": "2013-01-01",
+            "url": "http://sbrc2013.unb.br/files/anais/trilha-principal/artigos/artigo-44.pdf"
+        },
+        {
+            "name": "Um Framework de Desenvolvimento de Aplicações Ubíquas em Ambientes Inteligentes",
+            "publisher": "SBRC 2013 (Simpósio Brasileiro de Redes de Computadores e Sistemas Distribuídos)",
+            "releaseDate": "2013-01-01",
+            "url": "http://sbrc2013.unb.br/files/anais/trilha-principal/artigos/artigo-45.pdf"
+        },
+        {
+            "name": "Interpretação de Contexto em Ambientes Inteligentes",
+            "publisher": "V Simpósio Brasileiro de Computação Ubíqua e Pervasiva (CSBC 2013)",
+            "releaseDate": "2013-01-01",
+            "url": "https://sol.sbc.org.br/index.php/sbcup/article/view/16946/16785"
+        },
+        {
+            "name": "Suporte para Coleta e Persistência de Dados de Contexto em um Sistema de Monitoramento Domiciliar Remoto de Pacientes",
+            "publisher": "Computer on the Beach 2011",
+            "releaseDate": "2011-01-01",
+            "url": "https://scispace.com/pdf/suporte-para-coleta-e-persistencia-de-dados-de-contexto-em-ny85n5i0lc.pdf"
+        }
+    ],
     "skills": [
         {
             "name": "Backend Development",
