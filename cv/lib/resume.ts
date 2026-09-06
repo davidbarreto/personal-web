@@ -38,6 +38,7 @@ export interface ResumeEducation {
     startDate: string
     endDate: string
     summary?: string
+    thesisUrl?: string
 }
 
 export interface ResumePublication {

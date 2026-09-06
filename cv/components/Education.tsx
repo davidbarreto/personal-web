@@ -51,6 +51,24 @@ export default function Education({ education }: Props) {
                                 </p>
                             )
                         }
+                        {
+                            entry.thesisUrl && (
+                                <a
+                                    href={entry.thesisUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        display: 'inline-block',
+                                        marginTop: '8px',
+                                        fontSize: '11px',
+                                        fontFamily: 'monospace',
+                                        color: 'var(--accent)',
+                                    }}
+                                >
+                                    Read thesis →
+                                </a>
+                            )
+                        }
                     </div>
                 ))}
             </div>
