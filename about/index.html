@@ -376,10 +376,11 @@
         let contactStep = -1, contactData = {};
 
         const DIRS = {
-            '~': ['README.md', 'about.txt', 'skills.json', 'links.txt', 'contact.sh', 'photo.txt', 'projects/'],
-            '~/projects': ['(coming_soon.txt)'],
+            '~': ['README.md', 'about.txt', 'skills.json', 'education.txt', 'publications.bib', 'links.txt', 'contact.sh', 'photo.txt', 'projects/'],
+            '~/projects': PORTFOLIO.projects.length ? PORTFOLIO.projects.map(p => p.label + '.txt') : ['(coming_soon.txt)'],
         };
-        const FILES = { 'README.md': showReadme, 'about.txt': cmdAbout, 'skills.json': showSkillsJson, 'links.txt': cmdLinks, 'contact.sh': showContactSh, 'photo.txt': showPhoto, };
+        const FILES = { 'README.md': showReadme, 'about.txt': cmdAbout, 'skills.json': showSkillsJson, 'education.txt': showEducation, 'publications.bib': showPublicationsBib, 'links.txt': cmdLinks, 'contact.sh': showContactSh, 'photo.txt': showPhoto, };
+        PORTFOLIO.projects.forEach(p => { FILES[p.label + '.txt'] = () => showProject(p); });
 
         // ── Helpers ───────────────────────────────────────────────
         function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -474,6 +475,7 @@
                 ['whoami', 'display short identity card'],
                 ['about', 'read the full bio'],
                 ['skills', 'list tech skills & stack'],
+                ['projects', 'things I\'ve built'],
                 ['links', 'show all social & professional links'],
                 ['competitive', 'show competitive programming profiles'],
                 ['contact', 'get in touch'],
@@ -506,6 +508,11 @@
                 printLine('Currently:', 'out-cyan out-bold');
                 PORTFOLIO.currently.forEach(c => printLine('  → ' + c, 'out-muted'));
                 if (PORTFOLIO.currentlyNote) { printLine(''); printLine(PORTFOLIO.currentlyNote, 'out-yellow'); }
+            }
+            if (PORTFOLIO.education && PORTFOLIO.education.length) {
+                const latest = PORTFOLIO.education[0];
+                printLine('');
+                printLine('Also hold a ' + latest.degree + ' (' + latest.institution + ', ' + latest.year + ') — see cat education.txt / cat publications.bib for the paper trail.', 'out-muted');
             }
             printLine('');
         }
@@ -541,6 +548,24 @@
             printLine('');
         }
 
+        function cmdProjects() {
+            printLine(''); printLine('# Projects', 'out-yellow out-bold'); printSep(); printLine('');
+            if (!PORTFOLIO.projects.length) { printLine('Nothing here yet — check back soon.', 'out-muted'); printLine(''); return; }
+            PORTFOLIO.projects.forEach(({ label, url, desc }) => {
+                printLine(label, 'out-cyan out-bold');
+                printLine('  ' + desc, 'out-muted');
+                printHTML(`  <a class="link-val" href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>`);
+                printLine('');
+            });
+        }
+
+        function showProject(p) {
+            printLine(''); printLine('# ' + p.label, 'out-yellow out-bold'); printSep(); printLine('');
+            printLine(p.desc); printLine('');
+            printHTML(`<span class="out-cyan">url:</span> <a class="link-val" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`);
+            printLine('');
+        }
+
         function cmdContact() {
             printLine(''); printLine('# contact', 'out-yellow out-bold'); printSep(); printLine('');
             printLine('Preferred email:', 'out-muted');
@@ -548,11 +573,39 @@
             printLine(''); printLine('Or run: send-mail  to compose from here', 'out-muted'); printLine('');
         }
 
+        function showEducation() {
+            printLine(''); printLine('# education.txt', 'out-yellow out-bold'); printSep(); printLine('');
+            PORTFOLIO.education.forEach(e => {
+                printLine(e.degree + ' — ' + e.institution, 'out-cyan out-bold');
+                printLine('  ' + e.year, 'out-muted');
+                if (e.thesis) { printLine(''); printLine('Thesis: ' + e.thesis); }
+                if (e.advisor) printLine('  Advisor: ' + e.advisor, 'out-muted');
+                if (e.funding) printLine('  Funded by: ' + e.funding, 'out-muted');
+                if (e.keywords && e.keywords.length) printLine('  Keywords: ' + e.keywords.join(', '), 'out-muted');
+                if (e.url) printHTML(`  <span class="out-cyan">pdf:</span> <a class="link-val" href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.url)}</a>`);
+                printLine('');
+            });
+            printLine('→ run cat publications.bib  for the full list', 'out-muted'); printLine('');
+        }
+
+        function showPublicationsBib() {
+            printLine(''); printLine('# publications.bib', 'out-yellow out-bold'); printSep(); printLine('');
+            PORTFOLIO.publications.forEach(p => {
+                printLine(p.title, 'out-cyan out-bold');
+                printLine('  ' + p.authors, 'out-muted');
+                const tags = [p.role === 'co-author' ? 'co-author' : null, p.type === 'abstract' ? 'abstract' : null].filter(Boolean);
+                printLine('  ' + p.venue + ', ' + p.year + (tags.length ? '  (' + tags.join(', ') + ')' : ''), 'out-muted');
+                if (p.url) printHTML(`  <a class="link-val" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`);
+                printLine('');
+            });
+        }
+
         function showReadme() {
             printLine(''); printLine('# README.md', 'out-yellow out-bold'); printSep(); printLine('');
             printLine('## ' + PORTFOLIO.handle + '/portfolio', 'out-cyan'); printLine('');
             printLine('Welcome to my terminal-based portfolio.'); printLine('');
-            [['whoami', 'who I am'], ['about', 'full bio'], ['skills', 'tech stack'], ['links', 'social & professional'], ['competitive', 'coding platforms'], ['contact', 'get in touch'], ['neofetch', 'system info']].forEach(([c, d]) => printLine('  ' + c.padEnd(13) + '→ ' + d));
+            [['whoami', 'who I am'], ['about', 'full bio'], ['skills', 'tech stack'], ['projects', 'things I\'ve built'], ['links', 'social & professional'], ['competitive', 'coding platforms'], ['contact', 'get in touch'], ['neofetch', 'system info']].forEach(([c, d]) => printLine('  ' + c.padEnd(13) + '→ ' + d));
+            printLine(''); printLine('Also see: cat education.txt · cat publications.bib', 'out-muted');
             printLine(''); printLine('Built with: HTML + CSS + vanilla JS + stubbornness.', 'out-muted'); printLine('');
         }
 
@@ -560,7 +613,12 @@
             printLine(''); printLine('# skills.json', 'out-yellow out-bold'); printSep();
             const obj = { name: PORTFOLIO.handle, languages: PORTFOLIO.skills.languages, areas: PORTFOLIO.skills.areas, tools: PORTFOLIO.skills.tools, currently_building: PORTFOLIO.currently[0] || '' };
             JSON.stringify(obj, null, 2).split('\n').forEach(l => {
-                const colored = l.replace(/"([^"]+)":/g, '<span class="out-cyan">"$1"</span>:').replace(/: "([^"]+)"/g, ': <span class="out-yellow">"$1"</span>').replace(/"([^"]+)"/g, '<span class="out-green">"$1"</span>');
+                const colored = l.replace(/"[^"]*"/g, (match, offset) => {
+                    const before = l.slice(0, offset).trimEnd();
+                    const after = l.slice(offset + match.length).trimStart();
+                    const cls = after.startsWith(':') ? 'out-cyan' : before.endsWith(':') ? 'out-yellow' : 'out-green';
+                    return `<span class="${cls}">${esc(match)}</span>`;
+                });
                 printHTML(colored);
             });
             printLine('');
@@ -679,7 +737,7 @@
             help: cmdHelp, whoami: cmdWhoami, about: cmdAbout, skills: cmdSkills,
             links: cmdLinks, competitive: cmdCompetitive, cp: cmdCompetitive,
             social: cmdLinks, contact: cmdContact, neofetch: cmdNeofetch,
-            ls: cmdLs, pwd: cmdPwd, clear: cmdClear,
+            projects: cmdProjects, ls: cmdLs, pwd: cmdPwd, clear: cmdClear,
         };
 
         function runCommand(raw) {
@@ -696,7 +754,7 @@
         }
 
         // ── Input ─────────────────────────────────────────────────
-        const allCmds = ['help', 'whoami', 'about', 'skills', 'links', 'competitive', 'contact', 'neofetch', 'ls', 'cat', 'clear', 'pwd', 'cd', 'echo', 'send-mail'];
+        const allCmds = ['help', 'whoami', 'about', 'skills', 'projects', 'links', 'competitive', 'contact', 'neofetch', 'ls', 'cat', 'clear', 'pwd', 'cd', 'echo', 'send-mail'];
         inputEl.addEventListener('keydown', e => {
             if (e.key === 'Enter') { const v = inputEl.value; inputEl.value = ''; contactStep >= 0 ? handleContactStep(v.trim()) : runCommand(v); }
             else if (e.key === 'ArrowUp') { e.preventDefault(); if (historyIdx < history.length - 1) { historyIdx++; inputEl.value = history[historyIdx]; } }
