@@ -38,3 +38,37 @@ body {
   font-family: var(--font-geist-sans), -apple-system, 'Segoe UI', sans-serif;
   transition: background 0.3s, color 0.3s;
 }
+
+/* The interactive site UI and the printable resume layout are two
+   separate trees (see PrintResume); only one is ever visible. */
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}
