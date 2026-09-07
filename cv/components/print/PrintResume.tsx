@@ -28,7 +28,7 @@ const styles = {
 }
 
 export default function PrintResume({ resume }: { resume: Resume }) {
-    const { basics, work, education, skills, languages, publications, projects } = resume
+    const { basics, work, education, skills, languages, publications, projects, awards, certificates } = resume
 
     return (
         <div className="print-only" style={styles.page}>
@@ -122,6 +122,24 @@ export default function PrintResume({ resume }: { resume: Resume }) {
                                 <p key={i} style={{ ...styles.p, fontSize: '9pt' }}>
                                     {p.url ? <a href={p.url} style={styles.link}>{p.name}</a> : p.name}<br />
                                     <span style={{ color: '#555' }}>{p.publisher}, {p.releaseDate.slice(0, 4)}</span>
+                                </p>
+                            ))}
+                        </>
+                    )}
+
+                    {(awards.length > 0 || certificates.length > 0) && (
+                        <>
+                            <h3 style={styles.h3sidebar}>Awards & Certificates</h3>
+                            {awards.map((a, i) => (
+                                <p key={`a${i}`} style={{ ...styles.p, fontSize: '9pt' }}>
+                                    {a.title}<br />
+                                    <span style={{ color: '#555' }}>{a.awarder}, {a.date.slice(0, 4)}</span>
+                                </p>
+                            ))}
+                            {certificates.map((c, i) => (
+                                <p key={`c${i}`} style={{ ...styles.p, fontSize: '9pt' }}>
+                                    {c.name}<br />
+                                    <span style={{ color: '#555' }}>{c.issuer}, {c.date.slice(0, 4)}</span>
                                 </p>
                             ))}
                         </>

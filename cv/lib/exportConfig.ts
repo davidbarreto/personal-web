@@ -16,6 +16,8 @@ export interface ExportConfig {
     hiddenLanguages: string[]
     hiddenProjects: string[]
     hiddenProfiles: string[]
+    hiddenAwards: string[]
+    hiddenCertificates: string[]
 }
 
 export const EMPTY_CONFIG: ExportConfig = {
@@ -26,6 +28,8 @@ export const EMPTY_CONFIG: ExportConfig = {
     hiddenLanguages: [],
     hiddenProjects: [],
     hiddenProfiles: [],
+    hiddenAwards: [],
+    hiddenCertificates: [],
 }
 
 // Stable-ish ids for each item, used instead of array indices so a
@@ -39,6 +43,8 @@ export const itemId = {
     languages: (l: Resume['languages'][number]) => l.language,
     projects: (p: Resume['projects'][number]) => p.name,
     profiles: (p: Resume['basics']['profiles'][number]) => p.network,
+    awards: (a: Resume['awards'][number]) => a.title,
+    certificates: (c: Resume['certificates'][number]) => c.name,
 }
 
 // The site shows everything unless you hide it.
@@ -46,9 +52,9 @@ export function getDefaultSiteConfig(): ExportConfig {
     return EMPTY_CONFIG
 }
 
-// The PDF starts trimmed: no X/Instagram/Lattes, no publications,
-// only Portuguese/English — computed from the live resume data so it
-// never points at stale ids.
+// The PDF starts trimmed: no X/Instagram/Lattes, no publications, no
+// projects, no awards/certificates, only Portuguese/English —
+// computed from the live resume data so it never points at stale ids.
 export function getDefaultPdfConfig(resume: Resume): ExportConfig {
     return {
         ...EMPTY_CONFIG,
@@ -57,6 +63,8 @@ export function getDefaultPdfConfig(resume: Resume): ExportConfig {
             .map(itemId.profiles),
         hiddenPublications: resume.publications.map(itemId.publications),
         hiddenProjects: resume.projects.map(itemId.projects),
+        hiddenAwards: resume.awards.map(itemId.awards),
+        hiddenCertificates: resume.certificates.map(itemId.certificates),
         hiddenLanguages: resume.languages
             .filter(l => !['Portuguese', 'English'].includes(l.language))
             .map(itemId.languages),
@@ -132,5 +140,7 @@ export function applyConfig(resume: Resume, cfg: ExportConfig): Resume {
         publications: resume.publications.filter(p => !cfg.hiddenPublications.includes(itemId.publications(p))),
         languages: resume.languages.filter(l => !cfg.hiddenLanguages.includes(itemId.languages(l))),
         projects: resume.projects.filter(p => !cfg.hiddenProjects.includes(itemId.projects(p))),
+        awards: resume.awards.filter(a => !cfg.hiddenAwards.includes(itemId.awards(a))),
+        certificates: resume.certificates.filter(c => !cfg.hiddenCertificates.includes(itemId.certificates(c))),
     }
 }

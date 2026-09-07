@@ -50,6 +50,8 @@ export default function ExportPanel({
         { key: 'hiddenSkills', title: 'Skills', items: resume.skills.map(s => ({ id: itemId.skills(s), label: s.name })) },
         { key: 'hiddenPublications', title: 'Publications', items: resume.publications.map(p => ({ id: itemId.publications(p), label: p.name })) },
         { key: 'hiddenProjects', title: 'Projects', items: resume.projects.map(p => ({ id: itemId.projects(p), label: p.name })) },
+        { key: 'hiddenAwards', title: 'Awards', items: resume.awards.map(a => ({ id: itemId.awards(a), label: a.title })) },
+        { key: 'hiddenCertificates', title: 'Certificates', items: resume.certificates.map(c => ({ id: itemId.certificates(c), label: c.name })) },
         { key: 'hiddenLanguages', title: 'Languages', items: resume.languages.map(l => ({ id: itemId.languages(l), label: l.language })) },
     ]
 
